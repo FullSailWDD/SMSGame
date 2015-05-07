@@ -1,0 +1,20 @@
+<div class="panel cursor-pointer" ng-class="{'panel-success':mission.status == 2, 'panel-danger':mission.status == 1, 'panel-warning': mission.status == 0, 'panel-default':selected}" ng-click="showGroup = !showGroup">
+  <div class="panel-heading">
+    <h4 class="panel-title">{{mission.title}}
+      <span class="pull-right">{{mission.status === 2?mission.awarded+' of ':''}} {{mission.points}} points {{mission.pending?'pending':''}} </span>
+    </h4>
+  </div>
+  <div ng-show="showGroup" class="panel-collapse">
+
+    <div class="panel-body" compile-html="mission.body"></div>
+    <div class="panel-body">
+      <h4>Comments</h4>
+      <div ng-repeat="comment in mission.comments">
+        {{comment.text}}
+        <p>- {{comment.user}}</p>
+        <hr>
+      </div>
+    </div>
+    <div ng-transclude></div>
+  </div>
+</div>

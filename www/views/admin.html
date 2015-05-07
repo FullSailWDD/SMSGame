@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Welcome to the Game {{user.name}}</h1>
+  </div>
+  <section>
+    <div class="well">
+      <h4>Activity</h4>
+      <div class="">
+        <div ng-repeat="active in activity" class="alert alert-success"> {{active.user}}: {{active.msg}}
+        <button type="button" class="close" aria-label="Close" ng-click="activity.$remove($index)"><span aria-hidden="true">&times;</span></button>
+        </div>
+
+      </div>
+      <button class="btn btn-danger" ng-click="clearActivity()">Clear</button>
+    </div>
+  </section>
+  <section>
+    <div class="well">
+      <h4>Archive Students</h4>
+      <form ng-submit="archiveStudent()">
+        <div class="form-group">
+          <label>User:</label>
+          <select ng-model="archiveUser" class="form-control">
+            <option ng-repeat="user in users" value="{{$index}}">{{user.name}}</option>
+          </select>
+
+        </div>
+         <div class="form-group">
+          <button type="submit" class="btn btn-primary">Archive</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <section>
+    <h2>Create New</h2>
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="well">
+          <h4>Create a New Mission</h4>
+          <form ng-submit="createNewMission()">
+            <div class="form-group">
+              <label>Skill</label>
+              <select ng-model="newMissionSkill" class="form-control">
+                <option ng-repeat="skill in skills" value="{{skill.$id}}">{{skill.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Level</label>
+              <select ng-model="newMissionLevel" class="form-control">
+                <option ng-repeat="($id,level) in skills[skills.$indexFor(newMissionSkill)].levels" value="{{$id}}">{{level.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" ng-model="newMission.title" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Points</label>
+              <input type="number"  ng-model="newMission.points" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label>Body</label>
+              <text-angular ng-model="newMission.body"></text-angular>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+      <div class="col-md-6">
+        <div class="well">
+          <h4>Create a New Level</h4>
+          <form ng-submit="createNewLevel()">
+            <div class="form-group">
+              <label>Skill</label>
+              <select ng-model="newLevelSkill" class="form-control">
+                <option ng-repeat="skill in skills" value="{{skill.$id}}">{{skill.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>To Unlock Must Complete:</label>
+              <select ng-model="newLevel.complete" class="form-control">
+                <option ng-repeat="($id,level) in skills[skills.$indexFor(newLevelSkill)].levels" value="{{$id}}">{{level.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Points in Level</label>
+              <input type="number" ng-model="newLevel.total_points" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" ng-model="newLevel.title" class="form-control">
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+      <div class="col-md-6">
+        <div class="well">
+          <h4>Create a New Skill</h4>
+          <form ng-submit="createNewSkill()">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" ng-model="newSkill.title" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Max Points</label>
+              <input type="number" ng-model="newSkill.max" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Goal</label>
+              <input type="number" ng-model="newSkill.goal" class="form-control">
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+  </div>
+  </section>
+</div>

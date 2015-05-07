@@ -1,0 +1,23 @@
+{
+  "name": "SMSGame",
+  "version": "0.0.0",
+  "authors": [
+    "Rachel Higley <me@rachelhigley.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularfire": "~0.8.0",
+    "angular-route": "~1.2.23",
+    "textAngular": "~1.2.2",
+    "angular-sanitize": "~1.2.23",
+    "font-awesome": "~4.2.0"
+  }
+}

@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Welcome to the Game {{user.name}}</h1>
+  </div>
+   <div class="form-group" ng-show="user.admin">
+    <label>User:</label>
+    <select ng-model="selectedUser" class="form-control">
+      <option ng-repeat="user in users" value="{{user.$id}}">{{user.name}}</option>
+    </select>
+  </div>
+
+  <h2>Progress:</h2>
+  <div class="text-center row">
+    <div class="col-md-{{ 12 / skills.length > 3? 12 / skills.length : 3}} cursor-pointer"  ng-repeat="skill in skills" ng-click="$parent.selectedArea = $index">
+      <h3>{{skill.title}}</h3>
+
+      <p>Current Ring: {{week = getWeek (skill.max, complete)}}</p>
+      <p>Points To Complete Ring: {{ (skill.max/4) * week - complete}}</p>
+      <div class="progress-circles"  >
+        <h2>{{complete / skill.max * 100 | int}}%</h2>
+        <div ng-show="hide">
+            {{  pending = (userSkills[skill.$id] | getPoints:'pending')}}
+            {{ complete = (userSkills[skill.$id] | getPoints:'complete')}}
+            {{ selected = (userSkills[skill.$id] | getPoints:'selected')}}
+          </div>
+        <div class="progress-circle-container progress-circle-selected">
+          <div class="progress-circle " style="border-width: {{ (selected + pending + complete )  / skill.max * 100 }}px;">
+          </div>
+        </div>
+
+        <div class="progress-circle-container progress-circle-pending">
+          <div class="progress-circle " style="border-width: {{ (pending + complete ) / skill.max * 100}}px;">
+          </div>
+        </div>
+
+        <div class="progress-circle-container progress-circle-completed">
+          <div class="progress-circle " style="border-width: {{complete / skill.max * 100}}px">
+          </div>
+        </div>
+
+        <div class="progress-circle level level-4" style="width: 200px; height: 200px;"></div>
+        <div class="progress-circle level level-3" style="width: 150px; height: 150px;"></div>
+        <div class="progress-circle level level-2" style="width: 100px; height: 100px;"></div>
+        <div class="progress-circle level level-1" style="width: 50px; height: 50px;"></div>
+
+
+
+
+       <!--  <div class="progress-circle-container progress-circle-goal" ng-class="{'more-then-half': (skill.goal / skill.max * 100  || 0) > 50}">
+          <div class="progress-circle " style="transform:rotate({{ getDeg(skill.goal,skill.max)}}deg)">
+          </div>
+        </div> -->
+
+
+      </div>
+      <br />
+      <p>Completed Points: <span class="text-success">{{complete}} of {{skill.max }}</span></p>
+      <p>Pending Points: <span class="text-danger">{{ pending }}</span></p>
+      <p>Selected Points Total:<span class="text-warning"> {{ selected}}</span></p>
+    </div>
+
+  </div>
+
+  <hr />
+  <h2>Missions:</h2>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li ng-class="{active:selectedArea === $index}" ng-repeat="($index,skill) in skills"><a ng-click="$parent.selectedArea = $index">{{skill.title}}</a></li>
+  </ul>
+
+  <div class="row">
+
+    <div class="col-md-6 ">
+
+      <div ng-repeat="($level_id,level) in skills[selectedArea].levels" ng-class="{lock:isLocked(skills[selectedArea].levels[level.complete].total_points,complete )}">
+
+
+        <h3><small><i class="glyphicon glyphicon-lock" ng-if="isLocked(skills[selectedArea].levels[level.complete].total_points,complete)"></i></small> {{level.title}} Missions:</h3>
+
+        <div ng-repeat="(mission_id,mission) in level.missions">
+          <div mission="mission" selected="userSkills[skills.$keyAt(selectedArea)].missions[mission_id]">
+            <div class="panel-footer text-right" ng-hide="isLocked(skills[selectedArea].levels[level.complete].total_points,complete)">
+              <a ng-click="selectMission(mission,$level_id, level.title, skills.$keyAt(selectedArea))" class="btn btn-primary">Select Mission</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+      <h3>Your Missions:</h3>
+
+
+      <div ng-repeat="mission in userSkills[skills.$keyAt(selectedArea)].missions | toArray | orderBy: orderBy ">
+        <div mission="mission">
+          <div class="panel-body">
+            <div class="form-group">
+              <label>Comments/Submission Link/etc:</label>
+              <textarea ng-model="mission.comment" class="form-control" ng-click="$event.stopPropagation()"></textarea>
+
+            </div>
+            <div class="form-group">
+              <a class="btn btn-success pull-right" ng-click="addComment(mission.$key,skills.$keyAt(selectedArea),mission.comment,$event)">Add Comment</a>            </div>
+          </div>
+          <div class="panel-footer text-right" ng-if="user.admin && mission.status > 0">
+            <div class="btn-group">
+              <a class="btn btn-{{point.class}}"  ng-click="awardPoints(point.value ,skills.$keyAt(selectedArea), mission.$key, mission.points)" ng-repeat="point in points">{{point.value}}</a>
+            </div>
+          </div>
+          <div class="panel-footer" ng-if="mission.status == 0">
+            <a ng-click="removeMission($index,skills.$keyAt(selectedArea) )" class="btn btn-danger">Remove Mission</a>
+            <a ng-click="markPending(mission.$key,skills.$keyAt(selectedArea))" class="btn btn-primary pull-right">Complete Mission</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
